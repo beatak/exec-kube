@@ -1,2 +1,3 @@
 # exec-kube
-`kube exec… -- bash` but more simpler
+
+`kube exec… -- bash` but much simpler and interactive
