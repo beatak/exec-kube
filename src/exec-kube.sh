@@ -6,6 +6,14 @@ function main {
 
   check_requirements
 
+  local show_command=false
+  for arg in "$@"; do
+    if [[ "$arg" == "--show-command" ]]; then
+      show_command=true
+      break
+    fi
+  done
+
   local namespace=$(get_namespace "$@")
   if [[ -z "$namespace" ]]; then
     warn "No namespace given"
@@ -31,8 +39,13 @@ function main {
     fi
   done
 
-  warn "Connecting to pod: $connecting_pod"
-  kubectl exec -it -n "$namespace" "$connecting_pod" -- bash
+  if [[ "$show_command" == true ]]; then
+    warn "Here's the command to connect to pod: $connecting_pod"
+    echo "kubectl exec -it -n \"$namespace\" \"$connecting_pod\" -- bash"
+  else
+    warn "Connecting to pod: $connecting_pod"
+    kubectl exec -it -n "$namespace" "$connecting_pod" -- bash
+  fi
 
   warn "Exiting"
   exit 0
